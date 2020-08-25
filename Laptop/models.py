@@ -69,6 +69,8 @@ class LaptopSpec(models.Model):
     IncludedComponents = models.TextField()
     SoftwareIncluded = models.TextField()
     DataLinkProtocol = models.CharField(default="IEEE 802.11 a/b/g/n/ac", max_length=20)
+    #URL
+    #url = models.CharField(max_length=40)
     # file = laptop.csv
     def __str__(self):
         return self.DisplayName

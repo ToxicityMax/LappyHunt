@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import LaptopSpec
+from django.http import HttpResponse, Http404
 
 
 def home(request):
@@ -8,9 +9,16 @@ def home(request):
 
 def laptop(request):
     if request.method == "GET":
-        lap_list = LaptopSpec.objects.order_by("id")
-        context = {"lap_list": lap_list}
-        return render(request, "specs/main.html", context)
+        try:
+            order = request.GET["order"]
+            print(order)
+            lap_list = LaptopSpec.objects.order_by(order)
+            context = {"lap_list": lap_list}
+            return render(request, "specs/main.html", context)
+        except:
+            lap_list = LaptopSpec.objects.order_by("id")
+            context = {"lap_list": lap_list}
+            return render(request, "specs/main.html", context)
     else:
         query = request.POST["search"]
         specs = LaptopSpec.objects.filter(DisplayName__icontains=query)
@@ -35,7 +43,7 @@ def detail(request, slug):
 def cart(request):
     cartID = []
     if request.method == "POST":
-        ids= request.POST["ID"]
+        ids = request.POST["ID"]
         cartID.append(ids)
         for id in cartID:
             specs = LaptopSpec.objects.filter(id=id)
@@ -45,3 +53,13 @@ def cart(request):
         print("asdfghjgfdsaDFGH")
         return render(request, "cart.html")
 
+
+#def sort(request):
+#    if request.method == "GET":
+#        order = request.GET["order"]
+#        print(order)
+#        lap_list = LaptopSpec.objects.order_by(order)
+#        context = {"lap_list": lap_list}
+#        return render(request, "specs/main.html", context)
+#    else:
+#        return Http404("Kutgya?")

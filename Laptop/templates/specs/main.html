@@ -3,6 +3,14 @@
 
 <body>
 
+<form method="GET" action="{% url 'LAPTOP' %}">
+        <input type="radio" name="order" value="-Battery" > Battery<br>
+        <input type="radio" name="order" value="-Ram" > Ram <br>
+        <input type="radio" name="order" value="-ProcessorType"> Processor <br>
+        <button class="btn btn-primary" type"submit">SORT!</button>
+
+</form>
+
   {% if  lap_list %}
 {% for laptop in lap_list %}
 <div class="card" style="width: 18rem;">
