@@ -7,7 +7,8 @@ class LaptopSpec(models.Model):
     #slug = models.SlugField(max_length=250, null=True, blank=True)
     Model = models.CharField(max_length=255)
     DisplayName = models.CharField(max_length=256,default='testing')
-    # Physical info
+    Image = models.ImageField(upload_to="LapImages/",blank=True)
+    # Physical info 
     Weight = models.CharField(max_length=5)  # "Item Weight"
     Dimensions = models.CharField(max_length=20)  # "Product Dimensions"
     ScreenSize = models.CharField(max_length=4)  #

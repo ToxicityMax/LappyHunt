@@ -52,6 +52,7 @@ def cart(request):
     else:
         print("asdfghjgfdsaDFGH")
         return render(request, "cart.html")
+3
 
 
 #def sort(request):

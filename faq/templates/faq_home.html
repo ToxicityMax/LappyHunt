@@ -1,0 +1,28 @@
+<h1>See your questions here</h1>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="success {{ message.tags }} m-2" id="msg" role="success">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %} 
+
+<form class='form-inline d-flex' action="{% url 'FAQ_HOME'%}" method='POST'>
+            {%csrf_token%}
+            <h3>Ask Awayyy</h3>
+            <input class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" name="Question" type="text" />
+            <input class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" name="Author" type="text"  />
+
+            <button class="btn btn-primary mx-auto" type="submit">GO</button>
+</form>
+{% if faq %}
+{% for Faq in faq %}
+Question:  {{Faq.question}}
+<br>
+Answer: {{Faq.answer}}
+<br>
+{{Faq.author}}
+<br>
+{% endfor %}
+{% endif %}

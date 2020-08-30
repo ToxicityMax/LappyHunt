@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'faq.apps.FaqConfig',
     'Laptop.apps.LaptopConfig',
     'django.contrib.admin',
     'django.contrib.auth',
