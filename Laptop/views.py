@@ -9,21 +9,19 @@ def home(request):
 
 def laptop(request):
     if request.method == "GET":
-        try:
-            order = request.GET["order"]
-            print(order)
-            lap_list = LaptopSpec.objects.order_by(order)
+        if request.GET.getlist("search"):
+            order = request.GET.getlist("search")
+            lap_list = LaptopSpec.objects.order_by(*order)
             context = {"lap_list": lap_list}
             return render(request, "specs/main.html", context)
-        except:
-            lap_list = LaptopSpec.objects.order_by("id")
+        else:
+            lap_list = LaptopSpec.objects.order_by("id")    
             context = {"lap_list": lap_list}
             return render(request, "specs/main.html", context)
     else:
         query = request.POST["search"]
         specs = LaptopSpec.objects.filter(DisplayName__icontains=query)
         param = {"lap_list": specs, "query": query}
-
         return render(request, "specs/main.html", param)
 
 
@@ -52,10 +50,12 @@ def cart(request):
     else:
         print("asdfghjgfdsaDFGH")
         return render(request, "cart.html")
+
+
 3
 
 
-#def sort(request):
+# def sort(request):
 #    if request.method == "GET":
 #        order = request.GET["order"]
 #        print(order)

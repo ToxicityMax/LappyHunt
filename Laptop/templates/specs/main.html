@@ -1,12 +1,12 @@
-<html>
+~<html>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
 <body>
 
 <form method="GET" action="{% url 'LAPTOP' %}">
-        <input type="radio" name="order" value="-Battery" > Battery<br>
-        <input type="radio" name="order" value="-Ram" > Ram <br>
-        <input type="radio" name="order" value="-ProcessorType"> Processor <br>
+        <input type="checkbox" name="search" value="-Battery" > Battery<br>
+        <input type="checkbox" name="search" value="-Ram" > Ram <br>
+        <input type="checkbox" name="search" value="-ProcessorType"> Processor <br>
         <button class="btn btn-primary" type"submit">SORT!</button>
 </form>
 
@@ -23,9 +23,6 @@
     <input type = "hidden" name="ID"  value="{{laptop.id}}" >
     <button class="btn btn-primary" type"submit">Add to Cart</button>
   </form>
-  
-  
-  
   </div>
 </div>
 {% endfor %}

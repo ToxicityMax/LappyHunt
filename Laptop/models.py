@@ -3,12 +3,13 @@ from django.db.models.signals import pre_save, post_save
 from .utils import unique_slug_generator
 import csv
 
+
 class LaptopSpec(models.Model):
-    #slug = models.SlugField(max_length=250, null=True, blank=True)
+    # slug = models.SlugField(max_length=250, null=True, blank=True)
     Model = models.CharField(max_length=255)
-    DisplayName = models.CharField(max_length=256,default='testing')
-    Image = models.ImageField(upload_to="LapImages/",blank=True)
-    # Physical info 
+    DisplayName = models.CharField(max_length=256, default="testing")
+    #Image = models.ImageField(upload_to="LapImages/", blank=True)
+    # Physical info
     Weight = models.CharField(max_length=5)  # "Item Weight"
     Dimensions = models.CharField(max_length=20)  # "Product Dimensions"
     ScreenSize = models.CharField(max_length=4)  #
@@ -43,7 +44,7 @@ class LaptopSpec(models.Model):
     Ram = models.CharField(max_length=6)  # In Gb
     RamTechnology = models.CharField(max_length=8)
     # ExtraRam = models.PositiveIntegerField()  # In Gb
-    HardDrive = models.CharField(max_length=10, default="512")  # In Gb
+    # HardDrive = models.CharField(max_length=10,null=True, blank=True, default=None)  # In Gb
     HardDriveType = models.CharField(max_length=12, default=None)  # In Gb
 
     # Battery
@@ -70,8 +71,8 @@ class LaptopSpec(models.Model):
     IncludedComponents = models.TextField()
     SoftwareIncluded = models.TextField()
     DataLinkProtocol = models.CharField(default="IEEE 802.11 a/b/g/n/ac", max_length=20)
-    #URL
-    #url = models.CharField(max_length=40)
+    # URL
+    # url = models.CharField(max_length=40)
     # file = laptop.csv
     def __str__(self):
         return self.DisplayName
@@ -82,4 +83,4 @@ class LaptopSpec(models.Model):
 #        instance.slug = unique_slug_generator(instance)
 #
 #
-#pre_save.connect(rl_pre_save_receiver, sender=Post)
+# pre_save.connect(rl_pre_save_receiver, sender=Post)
