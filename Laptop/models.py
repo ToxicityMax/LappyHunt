@@ -3,11 +3,17 @@ from django.db.models.signals import pre_save, post_save
 from .utils import unique_slug_generator
 import csv
 
+class Company(models.Model):
+    cname = models.CharField(max_length=25)
+    def __str__(self):
+        return self.cname
+
 
 class LaptopSpec(models.Model):
+    Company = models.ForeignKey(Company,on_delete=models.CASCADE)
     # slug = models.SlugField(max_length=250, null=True, blank=True)
     Model = models.CharField(max_length=255)
-    DisplayName = models.CharField(max_length=256, default="testing")
+    DisplayName = models.CharField(max_length=256,null=True, blank=True,default="testing")
     #Image = models.ImageField(upload_to="LapImages/", blank=True)
     # Physical info
     Weight = models.CharField(max_length=5)  # "Item Weight"
@@ -44,7 +50,7 @@ class LaptopSpec(models.Model):
     Ram = models.CharField(max_length=6)  # In Gb
     RamTechnology = models.CharField(max_length=8)
     # ExtraRam = models.PositiveIntegerField()  # In Gb
-    # HardDrive = models.CharField(max_length=10,null=True, blank=True, default=None)  # In Gb
+    HardDrive = models.CharField(max_length=10, default="512", blank=True)  # In Gb
     HardDriveType = models.CharField(max_length=12, default=None)  # In Gb
 
     # Battery
