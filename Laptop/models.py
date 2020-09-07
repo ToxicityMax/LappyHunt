@@ -4,13 +4,13 @@ from .utils import unique_slug_generator
 import csv
 
 class Company(models.Model):
-    cname = models.CharField(max_length=25)
+    name = models.CharField(max_length=25)
     def __str__(self):
-        return self.cname
+        return self.name
 
 
 class LaptopSpec(models.Model):
-    Company = models.ForeignKey(Company,on_delete=models.CASCADE)
+    Company = models.ForeignKey(Company,default=1,on_delete=models.CASCADE)
     # slug = models.SlugField(max_length=250, null=True, blank=True)
     Model = models.CharField(max_length=255)
     DisplayName = models.CharField(max_length=256,null=True, blank=True,default="testing")

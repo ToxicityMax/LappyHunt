@@ -5,12 +5,11 @@ from django.utils import timezone
 import pytz
 
 
-
 class FaqL(models.Model):
     question = models.CharField(max_length=256,blank=False) 
     answer = models.TextField(blank=True)
     date = models.DateTimeField(blank=True)
-    author = models.CharField(max_length=50,blank=False)
+    author = models.CharField(max_length=50,blank=True)
 
     def __str__(self):
         return self.question
