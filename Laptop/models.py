@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.signals import pre_save, post_save
 from .utils import unique_slug_generator
 import csv
+   
 
 class Company(models.Model):
     name = models.CharField(max_length=25)
@@ -10,11 +11,12 @@ class Company(models.Model):
 
 
 class LaptopSpec(models.Model):
-    Company = models.ForeignKey(Company,default=1,on_delete=models.CASCADE)
+    Company = models.CharField(max_length=32)
     # slug = models.SlugField(max_length=250, null=True, blank=True)
     Model = models.CharField(max_length=255)
-    DisplayName = models.CharField(max_length=256,null=True, blank=True,default="testing")
-    #Image = models.ImageField(upload_to="LapImages/", blank=True)
+    FullName = models.CharField(max_length=256,null=True, blank=True)
+    DisplayName = models.CharField(max_length=128,null=True, blank=True,default="testing")
+    Image = models.ImageField(upload_to="LapImages/", blank=True)
     # Physical info
     Weight = models.CharField(max_length=5)  # "Item Weight"
     Dimensions = models.CharField(max_length=20)  # "Product Dimensions"
@@ -78,7 +80,7 @@ class LaptopSpec(models.Model):
     SoftwareIncluded = models.TextField()
     DataLinkProtocol = models.CharField(default="IEEE 802.11 a/b/g/n/ac", max_length=20)
     # URL
-    # url = models.CharField(max_length=40)
+    url = models.CharField(max_length=40,blank=True)
     # file = laptop.csv
     def __str__(self):
         return self.DisplayName
@@ -90,3 +92,8 @@ class LaptopSpec(models.Model):
 #
 #
 # pre_save.connect(rl_pre_save_receiver, sender=Post)
+
+class Type(models.Model):
+    business = models.ManyToManyField(LaptopSpec,related_name="business")
+    gaming = models.ManyToManyField(LaptopSpec,related_name="gaming")
+    student = models.ManyToManyField(LaptopSpec,related_name="student")
