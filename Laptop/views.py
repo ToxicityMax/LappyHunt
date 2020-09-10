@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from .models import LaptopSpec
-from django.http import HttpResponse, Http404
-
+from .models import *
+from django.http import Http404,JsonResponse
+from django.shortcuts import redirect
+from json import loads
 
 def home(request):
     return render(request, "Home/index.html")
@@ -39,28 +40,21 @@ def detail(request, slug):
 
 
 def cart(request):
-    cartID = []
-    if request.method == "POST":
-        ids = request.POST["ID"]
-        cartID.append(ids)
-        for id in cartID:
-            specs = LaptopSpec.objects.filter(id=id)
-            print(specs[0])
-        return render(request, "cart.html", {"specs": specs})
-    else:
-        print("asdfghjgfdsaDFGH")
-        return render(request, "cart.html")
-
-
-3
-
-
-# def sort(request):
-#    if request.method == "GET":
-#        order = request.GET["order"]
-#        print(order)
-#        lap_list = LaptopSpec.objects.order_by(order)
-#        context = {"lap_list": lap_list}
-#        return render(request, "specs/main.html", context)
-#    else:
-#        return Http404("Kutgya?")
+    if request.method=='GET':
+        if request.user.is_authenticated:
+            customer = request.user.customer
+            cart,created = Cart.objects.get_or_create(customer=customer)
+            items = cart.cartitem_set.all()
+            return render(request, "cart.html",{"items":items})
+        else:
+            return redirect('HOME')
+def updateitem(request):
+    data = loads(request.body)
+    laptopId = data["productId"]
+    action = data["action"]
+    print(data)
+    customer = request.user.customer
+    laptop = LaptopSpec.objects.get(id=laptopId)
+    cart,created = Cart.objects.get_or_create(customer=customer)
+    cartitem,created = cartItem.objects.get_or_create(laptop=laptop,cart=cart)
+    return JsonResponse("item was added",safe=False)

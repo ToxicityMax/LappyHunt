@@ -1,7 +1,4 @@
-{% if specs %}
-{% for laptop in specs %}
-{{laptop}}
+{% for i in items %}
+{{i.laptop.FullName}}
+<br>
 {% endfor %}
-{% else %}
-HI
-{% endif %}

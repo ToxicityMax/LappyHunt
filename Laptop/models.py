@@ -1,21 +1,17 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.db.models.signals import pre_save, post_save
 from .utils import unique_slug_generator
 import csv
-   
-
-class Company(models.Model):
-    name = models.CharField(max_length=25)
-    def __str__(self):
-        return self.name
 
 
 class LaptopSpec(models.Model):
     Company = models.CharField(max_length=32)
     # slug = models.SlugField(max_length=250, null=True, blank=True)
     Model = models.CharField(max_length=255)
-    FullName = models.CharField(max_length=256,null=True, blank=True)
-    DisplayName = models.CharField(max_length=128,null=True, blank=True,default="testing")
+    FullName = models.CharField(max_length=256, null=True, blank=True)
+    DisplayName = models.CharField(
+        max_length=128, null=True, blank=True, default="testing")
     Image = models.ImageField(upload_to="LapImages/", blank=True)
     # Physical info
     Weight = models.CharField(max_length=5)  # "Item Weight"
@@ -52,7 +48,8 @@ class LaptopSpec(models.Model):
     Ram = models.CharField(max_length=6)  # In Gb
     RamTechnology = models.CharField(max_length=8)
     # ExtraRam = models.PositiveIntegerField()  # In Gb
-    HardDrive = models.CharField(max_length=10, default="512", blank=True)  # In Gb
+    HardDrive = models.CharField(
+        max_length=10, default="512", blank=True)  # In Gb
     HardDriveType = models.CharField(max_length=12, default=None)  # In Gb
 
     # Battery
@@ -78,10 +75,12 @@ class LaptopSpec(models.Model):
 
     IncludedComponents = models.TextField()
     SoftwareIncluded = models.TextField()
-    DataLinkProtocol = models.CharField(default="IEEE 802.11 a/b/g/n/ac", max_length=20)
+    DataLinkProtocol = models.CharField(
+        default="IEEE 802.11 a/b/g/n/ac", max_length=20)
     # URL
-    url = models.CharField(max_length=40,blank=True)
+    url = models.CharField(max_length=40, blank=True)
     # file = laptop.csv
+
     def __str__(self):
         return self.DisplayName
 
@@ -94,6 +93,30 @@ class LaptopSpec(models.Model):
 # pre_save.connect(rl_pre_save_receiver, sender=Post)
 
 class Type(models.Model):
-    business = models.ManyToManyField(LaptopSpec,related_name="business")
-    gaming = models.ManyToManyField(LaptopSpec,related_name="gaming")
-    student = models.ManyToManyField(LaptopSpec,related_name="student")
+    business = models.ManyToManyField(LaptopSpec, related_name="business")
+    gaming = models.ManyToManyField(LaptopSpec, related_name="gaming")
+    student = models.ManyToManyField(LaptopSpec, related_name="student")
+
+
+class Customer(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank = True, null=True)
+    email = models.CharField(max_length=128, null=True, blank =True)
+
+    def __str__(self):
+        return self.email
+
+
+class Cart(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank = True)
+    date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.id)
+
+
+class cartItem(models.Model):
+    laptop = models.ForeignKey(LaptopSpec, on_delete=models.SET_NULL, null=True, blank = True)
+    cart = models.ForeignKey(Cart, on_delete=models.SET_NULL, null=True, blank = True)
+    
+    def __str__(self):
+        return self.laptop.DisplayName

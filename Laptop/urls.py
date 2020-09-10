@@ -6,6 +6,6 @@ urlpatterns = [
     path("", views.home, name="HOME"),
     path("laptop/", views.laptop, name="LAPTOP"),
     path("cart/", views.cart, name="CART"),
-    #path("sort/", views.sort, name="SORT"),
+    path("update-item/", views.updateitem, name="UPDATE"),
     #path('laptop/details/<slug:slug>', detail),
 ]

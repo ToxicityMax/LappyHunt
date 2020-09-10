@@ -1,5 +1,31 @@
-~<html>
+{% load static %}
+<html>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script type="text/javascript"> 
+var user = '{{request.user}}'
+function getToken(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getToken('csrftoken');
+</script>
+
+
+
+
+
+
 
 <body>
 
@@ -17,12 +43,8 @@
   <div class="card-body">
     <h5 class="card-title">{{ laptop.DisplayName }}</h5>
     <p class="card-text"></p>
-
-  <form id="cart" method="POST" action="{% url 'CART' %}">
-      {% csrf_token %}
-    <input type = "hidden" name="ID"  value="{{laptop.id}}" >
-    <button class="btn btn-primary" type"submit">Add to Cart</button>
-  </form>
+    <button data-product="{{laptop.id}}" data-action="add" class="update-cart btn btn-primary add-btn" type"">Add to Cart</button>
+ 
   </div>
 </div>
 {% endfor %}
@@ -45,6 +67,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script type="text/javascript" src="{% static 'js/cart.js' %}" ></script>
 
 
 
