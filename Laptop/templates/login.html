@@ -1,0 +1,11 @@
+{% if error %}
+{{error}}
+{% endif %}
+
+<form class='form-inline d-flex' action="{% url 'AUTH'%}" method='POST'>
+            {%csrf_token%}
+           
+        <input class="form-control flex-fill mb-sm-0" name="email" type="text" placeholder="Email" />
+        <input class="form-control flex-fill mb-sm-0" name="password" type="password" placeholder="Password" />
+        <button class="btn btn-primary mx-auto" type="submit">View Cart</button>
+</form>

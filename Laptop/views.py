@@ -1,8 +1,12 @@
 from django.shortcuts import render
+from django.contrib.auth.models import User
 from .models import *
-from django.http import Http404,JsonResponse
+from django.http import Http404, JsonResponse
 from django.shortcuts import redirect
 from json import loads
+from django.contrib.auth import authenticate, login as dj_login
+
+
 
 def home(request):
     return render(request, "Home/index.html")
@@ -16,7 +20,7 @@ def laptop(request):
             context = {"lap_list": lap_list}
             return render(request, "specs/main.html", context)
         else:
-            lap_list = LaptopSpec.objects.order_by("id")    
+            lap_list = LaptopSpec.objects.order_by("id")
             context = {"lap_list": lap_list}
             return render(request, "specs/main.html", context)
     else:
@@ -40,21 +44,55 @@ def detail(request, slug):
 
 
 def cart(request):
-    if request.method=='GET':
+    if request.method == 'GET':
         if request.user.is_authenticated:
             customer = request.user.customer
-            cart,created = Cart.objects.get_or_create(customer=customer)
+            print(customer)
+            cart, created = Cart.objects.get_or_create(customer=customer)
+            print(cart, created)
             items = cart.cartitem_set.all()
-            return render(request, "cart.html",{"items":items})
+            return render(request, "cart.html", {"items": items})
         else:
             return redirect('HOME')
+
+
 def updateitem(request):
     data = loads(request.body)
     laptopId = data["productId"]
     action = data["action"]
-    print(data)
     customer = request.user.customer
     laptop = LaptopSpec.objects.get(id=laptopId)
-    cart,created = Cart.objects.get_or_create(customer=customer)
-    cartitem,created = cartItem.objects.get_or_create(laptop=laptop,cart=cart)
-    return JsonResponse("item was added",safe=False)
+    if action == "add":
+        cart, created = Cart.objects.get_or_create(customer=customer)
+        cartitem, created = cartItem.objects.get_or_create(
+            laptop=laptop, cart=cart)
+        return JsonResponse("item was added", safe=False)
+    elif action == "delete":
+        cart = customer.cart_set.all()
+        cart[0].cartitem_set.filter(laptop=laptop).delete()
+        return JsonResponse("Item was deleted")
+
+def login(request):
+        if request.method == 'GET':
+            return render(request,"login.html")
+        else:
+            email = request.POST["email"]
+            username = email.split("@")
+            password = request.POST["password"]
+            user,created = User.objects.get_or_create(username=username[0])
+            
+            if created:
+                user.password = password
+                user.save()
+                customer= Customer.objects.create(user=user,email=email)
+                customer.save()
+                dj_login(request, user)
+                return redirect("CART")
+            else:
+                user = authenticate(request,username=username[0], password=password)
+                if user is not None:
+                    dj_login(request, user)
+                    return redirect("CART")
+                else:
+                    #password incorrect
+                    return render(request,"login.html",{"error":"Incorrect Password"})

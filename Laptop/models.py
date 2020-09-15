@@ -7,7 +7,7 @@ import csv
 
 class LaptopSpec(models.Model):
     Company = models.CharField(max_length=32)
-    # slug = models.SlugField(max_length=250, null=True, blank=True)
+    #slug = models.SlugField(max_length=250, null=True, blank=True)
     Model = models.CharField(max_length=255)
     FullName = models.CharField(max_length=256, null=True, blank=True)
     DisplayName = models.CharField(
