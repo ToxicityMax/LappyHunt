@@ -1,0 +1,125 @@
+{% block main %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Kurale&family=Lobster&family=Montserrat&family=Raleway:wght@400;600&family=Share+Tech&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <!-- <link rel="shortcut icon" href="favicon.ico" /> -->
+    <link
+      rel="stylesheet"
+      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+      integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500&display=swap" rel="stylesheet"> -->
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Chelsea+Market&amp;family=Creepster&amp;family=Montserrat&amp;family=Work+Sans:ital,wght@1,700&amp;display=swap" rel="stylesheet"> -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./css/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bangers&family=Josefin+Sans:ital@1&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@500&display=swap" rel="stylesheet">
+
+
+    <style>
+      body{/*padding-top: 80px;*/
+	background: url(./assets/FAQ-background.png);
+	background-position: center;
+	background-attachment: fixed;
+	-webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover; 
+  /*filter: blur(8px);
+  -webkit-filter: blur(8px);*/
+
+  backdrop-filter: blur(8px);
+
+
+	
+}
+
+
+.panel{
+  color: rgb(0, 0, 0);
+  border-left: orange solid 5px;
+  border-right:none;
+  border-top : none;
+  border-bottom : none;
+ }
+.jumbotron{
+  color:rgb(0, 0, 0);
+}
+
+      
+  
+.card.panel:hover {
+  color: rgb(0, 0, 0);
+  border-left:rgb(228, 65, 250) solid 5px;
+  border-right:  none;
+  border-top : none;
+  border-bottom : none;
+  
+  transition-duration: 0.3s;
+} 
+.hi{
+  
+  border-radius: none; 
+  border-left:none;
+  border-bottom: 3px solid rgb(221, 96, 238); 
+  border-top: none; 
+  border-right:none; 
+  outline: none;
+   padding: 0.8rem 
+}
+.mybutton{
+  background-size: 200% 220%;
+   background-image:linear-gradient(to top, rgb(221, 153, 75) 50%, rgb(231, 70, 231) 50%);
+   background-position: top;
+   transition: background-position 0.3s ease; 
+   padding:1rem;
+   border-radius: 100%;
+   
+
+}
+.mybutton:hover{
+  background-position :bottom;
+  transition: background-position 0.3s ease; 
+  transition: 0.3s;
+  
+}
+
+
+
+</style>
+
+
+
+
+
+
+{% block title %}
+{% endblock title %}
+</head>
+{% block body %}
+{% endblock body %}
+
+</html>
+{% endblock main %}

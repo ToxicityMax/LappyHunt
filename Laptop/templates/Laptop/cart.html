@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+<title>@Cart</title>
+{% endblock title %}
+{% block style %}
+<script type="text/javascript"> 
+var user = '{{request.user}}'
+
+function getToken(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getToken('csrftoken');
+</script>
+{% endblock style %}
+
+{% block body %}
+<body>
+{% for i in items %}
+<br><br><br>
+{{i.laptop.FullName}}
+<button data-product="{{i.laptop.id}}" data-action="delete" class="update-cart btn btn-primary add-btn" type"">Remove from cart</button>
+
+<br><br><br>
+{% endfor %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="{% static 'js/cart.js' %}" ></script>
+
+</body>
+{% endblock body %}

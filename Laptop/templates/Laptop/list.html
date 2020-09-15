@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    <title>@Laptops</title>
+{% endblock title %}
+{% block style %}
+<style>
+  body{
+    background:white;
+    color: black;
+  }
+  .list{
+    border-left: 5px solid orange;
+    border-right:none;
+    border-top:none;
+    border-bottom:none;
+  }
+   
+</style>
+<script type="text/javascript"> 
+var user = '{{request.user}}'
+
+function getToken(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getToken('csrftoken');
+</script>
+{% endblock style %}
+
+
+
+{% block body %}
+<body>
+    <section>
+      <nav
+        class="navbar navbar-expand-lg navbar-light sticky-top">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <a class="navbar-brand" href="#"><h1>LAPTOP MANIA</h1></a>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item ">
+              <a class="nav-link " href="#">FAQs</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle "
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                Categories
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Student</a>
+                <a class="dropdown-item" href="#">Gaming</a>
+                <a class="dropdown-item" href="#">Bussiness</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item " href="#">All</a>
+              </div>
+            </li>
+
+
+            <li class="nav-item">
+              <a class="nav-link" href="#">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'CART'%}">View Cart</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </section>
+
+<form method="GET" action="{% url 'LAPTOP' %}">
+    <div class="jumbotron container">
+        <h1>LIST OF LAPTOPS</h1>
+        <div class="form-check">
+          <input  type="checkbox" class="form-check-input" id="materialGroupExample1" name="search" value="-Battery">
+          <label  class="form-check-label mr-5" for="materialGroupExample1">SORT ACC TO Battery</label>
+          <input type="checkbox" class="form-check-input" id="materialGroupExample2" name="search" value="-Ram">
+          <label class="form-check-label mr-5" for="materialGroupExample2">SORT ACC TO Ram</label>
+          <input type="checkbox" class="form-check-input" id="materialGroupExample2" name="search" value="-ProcessorType" >
+          <label class="form-check-label mr-5" for="materialGroupExample2">SORT ACC TO CPU</label>
+          <button class="btn btn-primary" type"submit">SORT!</button>
+        </div>
+    </div>
+</form>
+
+
+
+      <form class='form-inline d-flex' action="{% url 'LAPTOP'%}" method='POST'>
+            {%csrf_token%}
+            <input class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" name="search" type="text" placeholder="Search..." />
+            <button class="btn btn-primary mx-auto" type="submit">GO</button>
+    </form>
+    {% if query %}
+    <ul class="list-group t20">
+    <h1>search results for "{{query}}" </h1>
+    {% endif %}
+
+
+   <section id="list" class="container">
+
+   
+          {% if  lap_list %}
+          {% for laptop in lap_list %}
+          <div class="card list bg-transparent mb-5 mt-5" style="max-width: 100%; ">
+            <div class="row no-gutters">
+              <div class="col-md-4"  >
+                <a href="{% url 'HOME' %}"><img class="card-img-top" src="{{laptop.Image.url}}" alt="laptop.DisplayName"></a>
+              </div>
+              <div class="col-md-6">
+                <div class="card-body">
+                  <h5 class="card-title"> {{laptop.DisplayName}}</h5>
+                  <p class="card-text"><ul>
+                  {% if laptop.Ram  %}
+                    <li>RAM:{{laptop.Ram}}</li>
+                  {% endif %}
+                   {% if laptop.ProcessorName %}
+                    <li>Processor: {{laptop.ProcessorName}} {{laptop.ProcessorType}}</li>
+                    {% endif %}
+                    {% if laptop.ScreenSize %}
+                    <li>{{laptop.ScreenSize}}</li>
+                    {% endif %}
+                    {% if laptop.Hardrive %}
+                    <li>{{laptop.HardDrive}}</li>
+                    {% endif %}
+                    {% if laptop.Graphics %}
+                    <li>Graphic: {{laptop.Graphics}}</li>
+                    {% endif %}
+                  </ul></p>
+                  <div class="text-right">
+                    <button data-product="{{laptop.id}}" data-action="add" class="update-cart btn btn-primary add-btn" type"">Add to Cart</button>
+
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          <b><hr></b>
+          {% endfor %}
+          {% endif %}
+    </section>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="{% static 'js/cart.js' %}" ></script>
+</body>
+{% endblock body %}

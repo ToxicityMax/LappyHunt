@@ -7,7 +7,7 @@ def home(request):
     if request.method == "GET":
         faq = FaqL.objects.order_by("id").exclude(answer='')
         content = {"faq": faq}
-        return render(request, "faq_home.html",content)
+        return render(request, "faq.html",content)
     else:
         Q = request.POST["Question"]
         A = request.POST["Author"]
@@ -16,4 +16,4 @@ def home(request):
         messages.success(request, 'Question Successfully added!')
         faq = FaqL.objects.order_by("id").exclude(answer='')
         content = {"faq": faq}
-        return render(request,"faq_home.html",content)
+        return render(request,"faq.html",content)

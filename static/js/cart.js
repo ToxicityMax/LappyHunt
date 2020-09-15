@@ -11,7 +11,6 @@ for (i = 0; i < updateBtns.length; i++) {
             //addCookieItem(productId, action)
             updateUserOrder(productId, action)
         } else {
-            console.log('user is not authenticated')
             updateUserOrder(productId, action)
         }
     })
@@ -20,7 +19,7 @@ for (i = 0; i < updateBtns.length; i++) {
 function updateUserOrder(productId, action) {
     console.log('User is authenticated, sending data...')
 
-    var url = '/update_item/'
+    var url = '/update-item/'
 
     fetch(url, {
             method: 'POST',
@@ -33,7 +32,7 @@ function updateUserOrder(productId, action) {
         .then((response) => {
             return response.json();
         })
-        .then((data) => {});
+        .then((data) => { location.reload() });
 }
 //
 //function addCookieItem(productId, action) {
