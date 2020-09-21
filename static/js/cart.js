@@ -1,19 +1,24 @@
 var updateBtns = document.getElementsByClassName('update-cart')
-
 for (i = 0; i < updateBtns.length; i++) {
     updateBtns[i].addEventListener('click', function() {
         var productId = this.dataset.product
         var action = this.dataset.action
+        var user = this.dataset.user
         console.log('productId:', productId, 'Action:', action)
         console.log('USER:', user)
 
         if (!user == 'AnonymousUser') {
-            //addCookieItem(productId, action)
             updateUserOrder(productId, action)
         } else {
-            updateUserOrder(productId, action)
+            console.log("login required")
+            AnonymousUser(user)
         }
     })
+}
+
+function AnonymousUser(user) {
+    //window.location.reload()
+    window.location.replace("http://localhost:8000/login/")
 }
 
 function updateUserOrder(productId, action) {
@@ -30,9 +35,13 @@ function updateUserOrder(productId, action) {
             body: JSON.stringify({ 'productId': productId, 'action': action })
         })
         .then((response) => {
+            if (action == 'delete') {
+
+                location.reload()
+            }
             return response.json();
         })
-        .then((data) => { location.reload() });
+        .then((data) => {});
 }
 //
 //function addCookieItem(productId, action) {

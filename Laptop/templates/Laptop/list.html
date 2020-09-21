@@ -15,28 +15,7 @@
     border-top:none;
     border-bottom:none;
   }
-   
 </style>
-<script type="text/javascript"> 
-var user = '{{request.user}}'
-
-function getToken(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-const csrftoken = getToken('csrftoken');
-</script>
 {% endblock style %}
 
 
@@ -115,8 +94,8 @@ const csrftoken = getToken('csrftoken');
 
       <form class='form-inline d-flex' action="{% url 'LAPTOP'%}" method='POST'>
             {%csrf_token%}
-            <input class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" name="search" type="text" placeholder="Search..." />
-            <button class="btn btn-primary mx-auto" type="submit">GO</button>
+            <input class="form-control flex-fill mr-sm-2 mb-3 mb-sm-0" name="search" type="text" placeholder="Search..." />
+            <button class="btn btn-primary mx-auto  " type="submit">GO</button>
     </form>
     {% if query %}
     <ul class="list-group t20">
@@ -155,10 +134,8 @@ const csrftoken = getToken('csrftoken');
                     {% endif %}
                   </ul></p>
                   <div class="text-right">
-                    <button data-product="{{laptop.id}}" data-action="add" class="update-cart btn btn-primary add-btn" type"">Add to Cart</button>
-
+                    <button data-product="{{laptop.id}}" data-action="add" data-user="{{request.user}}"class="update-cart btn btn-primary add-btn" >Add to Cart</button>
                   </div>
-                  
                 </div>
               </div>
             </div>
@@ -168,12 +145,27 @@ const csrftoken = getToken('csrftoken');
           {% endif %}
     </section>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="{% static 'js/cart.js' %}" ></script>
+<script type="text/javascript"> 
+var user = '{{request.user}}'
+
+function getToken(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getToken('csrftoken');
+</script>
 </body>
 {% endblock body %}

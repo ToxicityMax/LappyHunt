@@ -3,7 +3,19 @@
 {% block title %}
 <title>@Cart</title>
 {% endblock title %}
-{% block style %}
+
+
+{% block body %}
+<body>
+{% for i in items %}
+<br><br><br>
+{{i.laptop.FullName}}
+<button data-product="{{i.laptop.id}}" data-action="delete" class="update-cart btn btn-primary add-btn" type"">Remove from cart</button>
+
+<br><br><br>
+{% endfor %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="{% static 'js/cart.js' %}" ></script>
 <script type="text/javascript"> 
 var user = '{{request.user}}'
 
@@ -24,19 +36,6 @@ function getToken(name) {
 }
 const csrftoken = getToken('csrftoken');
 </script>
-{% endblock style %}
-
-{% block body %}
-<body>
-{% for i in items %}
-<br><br><br>
-{{i.laptop.FullName}}
-<button data-product="{{i.laptop.id}}" data-action="delete" class="update-cart btn btn-primary add-btn" type"">Remove from cart</button>
-
-<br><br><br>
-{% endfor %}
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script type="text/javascript" src="{% static 'js/cart.js' %}" ></script>
 
 </body>
 {% endblock body %}

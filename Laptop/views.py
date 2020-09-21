@@ -6,14 +6,13 @@ from django.shortcuts import redirect
 from json import loads
 from django.contrib.auth import authenticate, login as dj_login
 
-
-
 def home(request):
     return render(request, "Laptop/index.html")
 
 
 def laptop(request):
     if request.method == "GET":
+        print(request.user)
         if request.GET.getlist("search"):
             order = request.GET.getlist("search")
             lap_list = LaptopSpec.objects.order_by(*order)
@@ -30,16 +29,14 @@ def laptop(request):
         return render(request, "Laptop/list.html", param)
 
 
-#def detail(request, slug):
-#    spec = LaptopSpec.objects.filter(slug__iexact=slug)
-#    if spec.exists():
-#        spec = spec.first()
-#    else:
-#        return HttpResponse("<h1>Post Not Found</h1>")
-#    context = {
-#        "spec": spec,
-#    }
-#    return render(request, "Laptop/specific_view.html", context)
+# def detail(request, slug):
+#     spec = LaptopSpec.objects.filter(slug__iexact=slug)
+#     if spec.exists():
+#         spec = spec.first()
+#     else:
+#         return HttpResponse("<h1>Not Found</h1>")
+#     context = {"spec": spec,}
+#     return render(request, "Laptop/specific_view.html", context)
 
 def detail(request):
     return render(request,"Laptop/specificview.html")
@@ -75,25 +72,26 @@ def updateitem(request):
 
 def login(request):
         if request.method == 'GET':
-            return render(request,"laptop/login.html")
+            if request.user.is_authenticated:
+                return redirect('LAPTOP') 
+            else:
+                return render(request,"Laptop/login.html") 
         else:
             email = request.POST["email"]
             username = email.split("@")
             password = request.POST["password"]
             user,created = User.objects.get_or_create(username=username[0])
-            
             if created:
-                user.password = password
-                user.save()
-                customer= Customer.objects.create(user=user,email=email)
-                customer.save()
-                dj_login(request, user)
-                return redirect("CART")
+                user.password = password 
+                user.save() 
+                customer= Customer.objects.create(user=user,email=email) 
+                customer.save() 
+                dj_login(request, user) 
+                return redirect("LAPTOP") 
             else:
                 user = authenticate(request,username=username[0], password=password)
                 if user is not None:
                     dj_login(request, user)
-                    return redirect("CART")
+                    return redirect("LAPTOP")
                 else:
-                    #password incorrect
-                    return render(request,"laptop/login.html",{"error":"Incorrect Password"})
+                    return render(request,"Laptop/login.html",{"error":"Incorrect Password"})
