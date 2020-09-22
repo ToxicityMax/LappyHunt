@@ -96,6 +96,23 @@ class Type(models.Model):
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank = True)
     date = models.DateField(auto_now_add=True)
+    counter = models.PositiveSmallIntegerField(default=0,null=True,blank=True)
+
+
+    def add(self):
+        if self.counter >= 0 and self.counter < 3:
+            self.counter += 1
+            self.save()
+            return True
+        else:
+            return False
+    def delete(self):
+        if self.counter <=3 and self.counter > 0:
+            self.counter -= 1
+            self.save()
+            return True
+        else:
+            return False
 
     def __str__(self):
         return str(self.id)

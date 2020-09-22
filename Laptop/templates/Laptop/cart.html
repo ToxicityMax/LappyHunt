@@ -38,7 +38,14 @@
     </section>
 
 
-
+{% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }} m-2" id="msg" role="success">
+                {{ message }}
+            </div>
+        {% endfor %}
+{% endif %}
+<br><br><br>
 {% for i in items %}
 <br><br><br>
 {{i.laptop.FullName}}

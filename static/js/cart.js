@@ -40,7 +40,7 @@ function updateUserOrder(productId, action) {
             }
             return response.json();
         })
-        .then((data) => {});
+        .then((data) => { return data.json() });
 }
 //
 //function addCookieItem(productId, action) {
