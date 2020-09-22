@@ -7,16 +7,47 @@
 
 {% block body %}
 <body>
+    <section>
+      <nav
+        class="navbar navbar-expand-lg navbar-light sticky-top">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <a class="navbar-brand" href="#"><h1>LAPTOP MANIA</h1></a>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item ">
+              <a class="nav-link " href="#">FAQs</a>
+            </li>
+            {% if request.user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'LOGOUT' %}">Logout</a>
+            {% endif %}            
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </section>
+
+
+
 {% for i in items %}
 <br><br><br>
 {{i.laptop.FullName}}
 <button data-product="{{i.laptop.id}}" data-action="delete" class="update-cart btn btn-primary add-btn" type"">Remove from cart</button>
-
 <br><br><br>
 {% endfor %}
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="{% static 'js/cart.js' %}" ></script>
-<script type="text/javascript"> 
+<script type="text/javascript">
 var user = '{{request.user}}'
 
 function getToken(name) {

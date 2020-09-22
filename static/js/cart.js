@@ -7,17 +7,16 @@ for (i = 0; i < updateBtns.length; i++) {
         console.log('productId:', productId, 'Action:', action)
         console.log('USER:', user)
 
-        if (!user == 'AnonymousUser') {
-            updateUserOrder(productId, action)
-        } else {
+        if (user == 'AnonymousUser') {
             console.log("login required")
             AnonymousUser(user)
+        } else {
+            updateUserOrder(productId, action)
         }
     })
 }
 
 function AnonymousUser(user) {
-    //window.location.reload()
     window.location.replace("http://localhost:8000/login/")
 }
 

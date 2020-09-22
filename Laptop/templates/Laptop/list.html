@@ -70,6 +70,14 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'CART'%}">View Cart</a>
             </li>
+            {% if request.user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'LOGOUT' %}">Logout</a>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'LOGIN'%}">Login</a>
+            {% endif %}            
+            </li>
           </ul>
         </div>
       </nav>
@@ -101,21 +109,26 @@
     <ul class="list-group t20">
     <h1>search results for "{{query}}" </h1>
     {% endif %}
-
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }} m-2" id="msg" role="success">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
 
    <section id="list" class="container">
 
    
-          {% if  lap_list %}
           {% for laptop in lap_list %}
           <div class="card list bg-transparent mb-5 mt-5" style="max-width: 100%; ">
             <div class="row no-gutters">
               <div class="col-md-4"  >
-                <a href="{% url 'HOME' %}"><img class="card-img-top" src="{{laptop.Image.url}}" alt="laptop.DisplayName"></a>
+                <a href="{% url 'DETAILS' laptop.slug %}"><img class="card-img-top" src="{{laptop.Image.url}}" alt="laptop.FullName"></a>
               </div>
               <div class="col-md-6">
                 <div class="card-body">
-                  <h5 class="card-title"> {{laptop.DisplayName}}</h5>
+                  <h5 class="card-title"> <a href="{% url 'DETAILS' laptop.slug %}">{{laptop.DisplayName}}</a></h5>
                   <p class="card-text"><ul>
                   {% if laptop.Ram  %}
                     <li>RAM:{{laptop.Ram}}</li>
@@ -142,7 +155,6 @@
           </div>
           <b><hr></b>
           {% endfor %}
-          {% endif %}
     </section>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>

@@ -1,13 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import pre_save, post_save
 from .utils import unique_slug_generator
-import csv
+from django.db.models import signals
+from django.dispatch import receiver
+
 
 
 class LaptopSpec(models.Model):
     Company = models.CharField(max_length=32)
-    #slug = models.SlugField(max_length=250, null=True, blank=True)
+    slug = models.SlugField(max_length=250, null=True, blank=True)
     Model = models.CharField(max_length=255)
     FullName = models.CharField(max_length=256, null=True, blank=True)
     DisplayName = models.CharField(
@@ -79,35 +80,21 @@ class LaptopSpec(models.Model):
         default="IEEE 802.11 a/b/g/n/ac", max_length=20)
     # URL
     url = models.CharField(max_length=40, blank=True)
-    # file = laptop.csv
-
     def __str__(self):
         return self.DisplayName
 
-
-# def rl_pre_save_receiver(sender, instance, *args, **kwargs):
-#    if not instance.slug:
-#        instance.slug = unique_slug_generator(instance)
-#
-#
-# pre_save.connect(rl_pre_save_receiver, sender=Post)
+@receiver(signals.pre_save, sender=LaptopSpec)
+def set_slug(sender, instance,*args, **kwargs):
+    if not instance.slug:
+        instance.slug = unique_slug_generator(instance) 
 
 class Type(models.Model):
     business = models.ManyToManyField(LaptopSpec, related_name="business")
     gaming = models.ManyToManyField(LaptopSpec, related_name="gaming")
     student = models.ManyToManyField(LaptopSpec, related_name="student")
 
-
-class Customer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, blank = True, null=True)
-    email = models.CharField(max_length=128, null=True, blank =True)
-
-    def __str__(self):
-        return self.email
-
-
 class Cart(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank = True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank = True)
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):

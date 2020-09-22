@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate,logout as dj_logout, login as dj_login
 from .models import *
 from django.http import Http404, JsonResponse
-from django.shortcuts import redirect
 from json import loads
-from django.contrib.auth import authenticate, login as dj_login
+from django.contrib import messages 
+
 
 def home(request):
     return render(request, "Laptop/index.html")
@@ -28,25 +29,16 @@ def laptop(request):
         param = {"lap_list": specs, "query": query}
         return render(request, "Laptop/list.html", param)
 
-
-# def detail(request, slug):
-#     spec = LaptopSpec.objects.filter(slug__iexact=slug)
-#     if spec.exists():
-#         spec = spec.first()
-#     else:
-#         return HttpResponse("<h1>Not Found</h1>")
-#     context = {"spec": spec,}
-#     return render(request, "Laptop/specific_view.html", context)
-
-def detail(request):
-    return render(request,"Laptop/specificview.html")
+def detail(request,slug):
+    spec = get_object_or_404(LaptopSpec,slug=slug)
+    return render(request, 'Laptop/specificview.html', {'spec': spec})
 
 def cart(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
-            customer = request.user.customer
-            print(customer)
-            cart, created = Cart.objects.get_or_create(customer=customer)
+            user = request.user
+            print(user)
+            cart, created = Cart.objects.get_or_create(user=user)
             print(cart, created)
             items = cart.cartitem_set.all()
             return render(request, "Laptop/cart.html", {"items": items})
@@ -58,17 +50,17 @@ def updateitem(request):
     data = loads(request.body)
     laptopId = data["productId"]
     action = data["action"]
-    customer = request.user.customer
+    user = request.user
     laptop = LaptopSpec.objects.get(id=laptopId)
     if action == "add":
-        cart, created = Cart.objects.get_or_create(customer=customer)
+        cart, created = Cart.objects.get_or_create(user=user)
         cartitem, created = cartItem.objects.get_or_create(
             laptop=laptop, cart=cart)
-        return JsonResponse("item was added", safe=False)
+        return JsonResponse({"message":"item was added"})
     elif action == "delete":
-        cart = customer.cart_set.all()
+        cart = user.cart_set.all()
         cart[0].cartitem_set.filter(laptop=laptop).delete()
-        return JsonResponse("Item was deleted")
+        return JsonResponse({"message": "Item was deleted"})
 
 def login(request):
         if request.method == 'GET':
@@ -77,21 +69,25 @@ def login(request):
             else:
                 return render(request,"Laptop/login.html") 
         else:
-            email = request.POST["email"]
-            username = email.split("@")
+            username = request.POST["email"]
+            email = username
             password = request.POST["password"]
-            user,created = User.objects.get_or_create(username=username[0])
-            if created:
-                user.password = password 
-                user.save() 
-                customer= Customer.objects.create(user=user,email=email) 
-                customer.save() 
-                dj_login(request, user) 
-                return redirect("LAPTOP") 
-            else:
-                user = authenticate(request,username=username[0], password=password)
+            try:
+                user = User.objects.get(username=username)
+                user = authenticate(request,username=username,email=email,password=password)
                 if user is not None:
                     dj_login(request, user)
                     return redirect("LAPTOP")
                 else:
                     return render(request,"Laptop/login.html",{"error":"Incorrect Password"})
+            except User.DoesNotExist:
+                user = User.objects.create_user(username=username,email=email,password=password)
+                user.save()
+                dj_login(request, user)
+                messages.success(request, 'You are logged in.')
+                return redirect('LAPTOP')
+
+def logout(request):
+    print(request.user)
+    dj_logout(request)
+    return redirect("LAPTOP")

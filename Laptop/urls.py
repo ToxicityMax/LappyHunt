@@ -7,6 +7,7 @@ urlpatterns = [
     path("laptop/", views.laptop, name="LAPTOP"),
     path("cart/", views.cart, name="CART"),
     path("update-item/", views.updateitem, name="UPDATE"),
-    path("login/", views.login, name="AUTH"),
-    path("detail/", views.detail),
+    path("login/", views.login, name="LOGIN"),
+    path("logout/",views.logout,name="LOGOUT"),
+    path('laptop/<slug:slug>/', views.detail, name='DETAILS'),
 ]
